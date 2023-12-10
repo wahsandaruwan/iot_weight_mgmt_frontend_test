@@ -88,7 +88,7 @@ const DeviceStat = () => {
     };
     axios(fetchChartData)
       .then((response) => {
-        const data = response.data.weighingDeviceData[0].deviceData.map(
+        const data = response.data.weighingDeviceData[0].deviceData?.map(
           (entry) => ({
             x: entry.timeCreated,
             y: parseFloat(entry.totalWeight),
@@ -414,9 +414,9 @@ const DeviceStat = () => {
             <Typography variant="h4">Battery</Typography>
             {device.length > 0 ? (
               <ProgressCircle
-                progress={device.deviceData.batteryPercentage / 100}
+                progress={device.deviceData?.batteryPercentage / 100}
                 icon="battery"
-                subText={device.deviceData.batteryVoltage}
+                subText={device.deviceData?.batteryVoltage}
               />
             ) : (
               <ProgressCircle icon="battery" />
@@ -434,9 +434,9 @@ const DeviceStat = () => {
             <Typography variant="h4">Items</Typography>
             {device.length > 0 ? (
               <ProgressCircle
-                progress={device.deviceData.itemCount / 100}
+                progress={device.deviceData?.itemCount / 100}
                 icon="count"
-                subText={device.deviceData.totalWeight}
+                subText={device.deviceData?.totalWeight}
               />
             ) : (
               <ProgressCircle icon="count" />
