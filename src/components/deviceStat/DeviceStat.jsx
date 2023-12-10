@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Box,
   Button,
@@ -6,182 +6,182 @@ import {
   TextField,
   Typography,
   useTheme,
-} from '@mui/material'
-import { tokens } from '../../theme'
-import { Formik } from 'formik'
-import * as yup from 'yup'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import Header from '../header'
-import ProgressCircle from '../progressCircle/ProgressCircle'
-import Device from './device.jpg'
-import styles from './deviceStat.module.css'
-import { useState, useEffect } from 'react'
-import LineChart from '../lineChartDevice'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
-import Swal from 'sweetalert2'
+} from "@mui/material";
+import { tokens } from "../../theme";
+import { Formik } from "formik";
+import * as yup from "yup";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Header from "../header";
+import ProgressCircle from "../progressCircle/ProgressCircle";
+import Device from "./device.jpg";
+import styles from "./deviceStat.module.css";
+import { useState, useEffect } from "react";
+import LineChart from "../lineChartDevice";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const checkoutSchema = yup.object().shape({
-  status: yup.string().required('Required'),
-  weight: yup.string().required('Required'),
-  assignedItem: yup.string().required('Required'),
-})
+  status: yup.string().required("Required"),
+  weight: yup.string().required("Required"),
+  assignedItem: yup.string().required("Required"),
+});
 
 const DeviceStat = () => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
-  const isNonMobile = useMediaQuery('(min-width:600px)')
-  const [image, setImage] = useState([])
-  const [imageURL, setImageURL] = useState([])
-  const [isImage, setIsImage] = useState(false)
-  const [device, setDevice] = useState([])
-  const [asignedItem, setAsignedItem] = useState([])
-  const [chartData, setChartData] = useState([])
-  const navigate = useNavigate()
-  const { id } = useParams()
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const isNonMobile = useMediaQuery("(min-width:600px)");
+  const [image, setImage] = useState([]);
+  const [imageURL, setImageURL] = useState([]);
+  const [isImage, setIsImage] = useState(false);
+  const [device, setDevice] = useState([]);
+  const [asignedItem, setAsignedItem] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     const config = {
-      method: 'GET',
+      method: "GET",
       url: `http://137.184.13.207:3300/api/device/one/${id}`,
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         token: `Bearer ${accessToken}`,
       },
       data: {},
-    }
+    };
     axios(config)
       .then((response) => {
-        setDevice(response.data.weighingDeviceData[0])
+        setDevice(response.data.weighingDeviceData[0]);
         // setImageURL(`http://209.23.9.3:3300/uploads/${response.data.user}`)
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   useEffect(() => {
     const config = {
-      method: 'GET',
+      method: "GET",
       url: `http://137.184.13.207:3300/api/device/item_details/one/${id}`,
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         token: `Bearer ${accessToken}`,
       },
       data: {},
-    }
+    };
     axios(config)
       .then((response) => {
-        setAsignedItem(response.data.weighingDeviceData[0])
+        setAsignedItem(response.data.weighingDeviceData[0]);
         // setImageURL(`http://209.23.9.3:3300/uploads/${response.data.user}`)
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   useEffect(() => {
     const config = {
-      method: 'GET',
+      method: "GET",
       url: `http://137.184.13.207:3300/api/device/all/${id}`,
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         token: `Bearer ${accessToken}`,
       },
       data: {},
-    }
+    };
     axios(config)
       .then((response) => {
         //  setAsignedItem(response.data.weighingDeviceData[0])
         // setImageURL(`http://209.23.9.3:3300/uploads/${response.data.user}`)
-        const data = response.data.weighingDeviceData[0].deviceData.map(
+        const data = response.data.weighingDeviceData[0].deviceData?.map(
           (entry) => ({
             x: entry.timeCreated,
             y: parseFloat(entry.totalWeight),
           })
-        )
-        setChartData(data)
+        );
+        setChartData(data);
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, []);
 
   const chart = [
     {
-      id: 'Device',
-      color: 'hsl(268, 70%, 50%)',
+      id: "Device",
+      color: "hsl(268, 70%, 50%)",
       data: chartData,
     },
-  ]
+  ];
 
   useEffect(() => {
-    if (image.length < 1) return
-    const newImageUrl = []
-    image.forEach((image) => newImageUrl.push(URL.createObjectURL(image)))
-    setImageURL(newImageUrl)
-  }, [image])
+    if (image.length < 1) return;
+    const newImageUrl = [];
+    image.forEach((image) => newImageUrl.push(URL.createObjectURL(image)));
+    setImageURL(newImageUrl);
+  }, [image]);
 
   useEffect(() => {
-    const MAX_FILE_SIZE = 2048
-    if (image.length < 1) return
-    const fileSize = image[0].size / 1024
+    const MAX_FILE_SIZE = 2048;
+    if (image.length < 1) return;
+    const fileSize = image[0].size / 1024;
     if (fileSize > MAX_FILE_SIZE) {
       Swal.fire({
-        title: 'Error',
-        text: 'Maximum image size must be less than 2MB',
-        icon: 'error',
+        title: "Error",
+        text: "Maximum image size must be less than 2MB",
+        icon: "error",
         background: colors.primary[400],
         color: colors.grey[100],
-        confirmButtonColor: '#4cceac',
+        confirmButtonColor: "#4cceac",
       }).then((result) => {
         if (result.isConfirmed) {
-          setImage([])
-          setIsImage(!isImage)
+          setImage([]);
+          setIsImage(!isImage);
         }
-      })
+      });
     }
-  }, [image])
+  }, [image]);
 
   function onImageChange(e) {
-    setImage([...e.target.files])
-    setIsImage(!isImage)
+    setImage([...e.target.files]);
+    setIsImage(!isImage);
   }
 
   const clearImage = () => {
-    setImage([])
-    setIsImage(!isImage)
-  }
+    setImage([]);
+    setIsImage(!isImage);
+  };
 
   const handleFormSubmit = (values) => {
-    console.log(values)
+    console.log(values);
     // window.location.reload(false)
-  }
+  };
 
   const convertItemDetails = (itemDetails) => {
     if (itemDetails && itemDetails.length > 0) {
-      const { title, weight } = itemDetails[0]
-      return `${title} - ${weight}kg`
+      const { title, weight } = itemDetails[0];
+      return `${title} - ${weight}kg`;
     }
-    return ''
-  }
+    return "";
+  };
 
   const initialValues = {
-    status: 'active',
+    status: "active",
     deviceId: device._id,
     dateCreated: device.dateCreated,
     lastUpdate: device.dateUpdated,
-    assignedItem: '01',
-  }
+    assignedItem: "01",
+  };
 
-  console.log(device)
+  console.log(device);
 
   return (
     <Box m="0 32px">
       <Header
         title={asignedItem.title}
-        subtitle={convertItemDetails(asignedItem.itemDetails)}
+        // subtitle={convertItemDetails(asignedItem.itemDetails)}
       />
       {/* <Box display="flex" justifyContent="end">
         <Button
@@ -222,7 +222,7 @@ const DeviceStat = () => {
               <Box display="flex" mb="32px">
                 <input
                   accept="image/*"
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                   id="raised-button-file"
                   multiple
                   type="file"
@@ -236,7 +236,7 @@ const DeviceStat = () => {
                       height="200px"
                       borderRadius="25px"
                       bgcolor={colors.primary[400]}
-                      sx={{ cursor: 'pointer' }}
+                      sx={{ cursor: "pointer" }}
                     >
                       <img src={Device} alt="offerImage" />
                       {/* 'https://images.pexels.com/photos/1820770/pexels-photo-1820770.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500' */}
@@ -248,7 +248,7 @@ const DeviceStat = () => {
                       height="200px"
                       borderRadius="25px"
                       bgcolor={colors.primary[400]}
-                      sx={{ cursor: 'pointer' }}
+                      sx={{ cursor: "pointer" }}
                     >
                       {imageURL.map((imageSrc) => (
                         <img src={imageSrc} />
@@ -263,7 +263,7 @@ const DeviceStat = () => {
                 width="100%"
                 gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                 sx={{
-                  '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' },
+                  "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
                 }}
               >
                 <TextField
@@ -273,12 +273,12 @@ const DeviceStat = () => {
                   label="Device ID"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.deviceId || ''}
+                  value={values.deviceId || ""}
                   name="deviceId"
                   disabled={true}
                   error={!!touched.deviceId && !!errors.deviceId}
                   helperText={touched.deviceId && errors.deviceId}
-                  sx={{ gridColumn: 'span 2' }}
+                  sx={{ gridColumn: "span 2" }}
                 />
                 <TextField
                   fullWidth
@@ -287,12 +287,12 @@ const DeviceStat = () => {
                   label="Date Created"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.dateCreated || ''}
+                  value={values.dateCreated || ""}
                   name="dateCreated"
                   disabled={true}
                   error={!!touched.dateCreated && !!errors.dateCreated}
                   helperText={touched.dateCreated && errors.dateCreated}
-                  sx={{ gridColumn: 'span 2' }}
+                  sx={{ gridColumn: "span 2" }}
                 />
                 {/* <TextField
                   fullWidth
@@ -412,9 +412,9 @@ const DeviceStat = () => {
           >
             <Typography variant="h4">Battery</Typography>
             <ProgressCircle
-              progress={device.deviceData.batteryPercentage / 100}
+              progress={device.deviceData?.batteryPercentage / 100}
               icon="battery"
-              subText={device.deviceData.batteryVoltage}
+              subText={device.deviceData?.batteryVoltage}
             />
           </Box>
           <Box
@@ -428,15 +428,15 @@ const DeviceStat = () => {
           >
             <Typography variant="h4">Items</Typography>
             <ProgressCircle
-              progress={device.deviceData.itemCount / 100}
+              progress={device.deviceData?.itemCount / 100}
               icon="count"
-              subText={device.deviceData.totalWeight}
+              subText={device.deviceData?.totalWeight}
             />
           </Box>
         </Box>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default DeviceStat
+export default DeviceStat;
