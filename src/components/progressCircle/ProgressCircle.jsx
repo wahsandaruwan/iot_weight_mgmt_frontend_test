@@ -52,7 +52,7 @@ const ProgressCircle = ({
               {percentage}
             </Typography>
             <Typography variant="h6" ml="5px" color={colors.greenAccent[500]}>
-              {subText}
+              {subText}kg
             </Typography>
           </Box>
         </>
