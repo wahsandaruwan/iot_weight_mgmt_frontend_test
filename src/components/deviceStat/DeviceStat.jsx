@@ -412,7 +412,7 @@ const DeviceStat = () => {
             backgroundColor={colors.primary[600]}
           >
             <Typography variant="h4">Battery</Typography>
-            {device.length > 0 ? (
+            {device.deviceData ? (
               <ProgressCircle
                 progress={device.deviceData?.batteryPercentage / 100}
                 icon="battery"
@@ -432,15 +432,13 @@ const DeviceStat = () => {
             backgroundColor={colors.primary[600]}
           >
             <Typography variant="h4">Items</Typography>
-            {device.length > 0 ? (
+            {device.deviceData ? (
               <ProgressCircle
                 progress={device.deviceData?.itemCount / 100}
                 icon="count"
-                subText={device.deviceData?.totalWeight}
+                subText={parseInt(device.deviceData?.totalWeight)}
               />
-            ) : (
-              <ProgressCircle icon="count" />
-            )}
+            ) : null}
           </Box>
         </Box>
       </Box>
