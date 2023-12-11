@@ -380,28 +380,13 @@ const DeviceStat = () => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
+        flexDirection="column"
         width="100%"
         backgroundColor={colors.primary[400]}
         mt="50px"
         p="15px 20px"
       >
-        <Box
-          display="flex"
-          height="40vh"
-          width="65vw"
-          flexDirection="column"
-          pb="20px"
-        >
-          <Typography variant="h3">Daily Stat</Typography>
-          <LineChart data={chart} />
-        </Box>
-        <Box
-          width="200px"
-          display="flex"
-          height="100%"
-          flexDirection="column"
-          gap="10px"
-        >
+        <Box width="100%" display="flex" height="100%" gap="10px">
           <Box
             display="flex"
             padding="10px"
@@ -409,27 +394,7 @@ const DeviceStat = () => {
             justifyContent="center"
             flexDirection="column"
             gap="10px"
-            backgroundColor={colors.primary[600]}
-          >
-            <Typography variant="h4">Battery</Typography>
-            {device.deviceData ? (
-              <ProgressCircle
-                progress={device.deviceData?.batteryPercentage / 100}
-                icon="battery"
-                subText={device.deviceData?.batteryVoltage}
-              />
-            ) : (
-              <ProgressCircle icon="battery" />
-            )}
-          </Box>
-          <Box
-            display="flex"
-            padding="10px"
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-            gap="10px"
-            backgroundColor={colors.primary[600]}
+            backgroundColor={"#dad3d3"}
           >
             <Typography variant="h4">Items</Typography>
             {device.deviceData ? (
@@ -440,6 +405,28 @@ const DeviceStat = () => {
               />
             ) : null}
           </Box>
+          <Box
+            display="flex"
+            padding="10px"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+            gap="10px"
+            backgroundColor={"#dad3d3"}
+          >
+            <Typography variant="h4">Battery</Typography>
+            {device.deviceData ? (
+              <ProgressCircle
+                progress={device.deviceData?.batteryPercentage / 100}
+                icon="battery"
+                subText={device.deviceData?.batteryVoltage}
+              />
+            ) : null}
+          </Box>
+        </Box>
+        <Box height="50vh" width="100%" pb="20px" mt="30px">
+          <Typography variant="h3">Daily Stat</Typography>
+          <LineChart data={chart} />
         </Box>
       </Box>
     </Box>

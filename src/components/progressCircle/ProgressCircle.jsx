@@ -6,7 +6,7 @@ import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 const ProgressCircle = ({
   progress = "0.75",
   subText = "5",
-  size = "120",
+  size = "180",
   icon = "battery",
 }) => {
   const theme = useTheme();
@@ -36,10 +36,10 @@ const ProgressCircle = ({
         <>
           <Battery5BarOutlinedIcon sx={{ fontSize: "24px" }} />
           <Box display="flex" flexDirection="column">
-            <Typography variant="h5" ml="5px" mt="5px">
+            <Typography variant="h3" ml="5px" mt="5px">
               {percentage}%
             </Typography>
-            <Typography variant="h6" ml="5px" color={colors.greenAccent[500]}>
+            <Typography variant="h4" ml="5px">
               {subText}v
             </Typography>
           </Box>
@@ -48,10 +48,10 @@ const ProgressCircle = ({
         <>
           <CategoryOutlinedIcon sx={{ fontSize: "24px" }} />
           <Box display="flex" flexDirection="column">
-            <Typography variant="h5" ml="5px" mt="5px">
+            <Typography variant="h3" ml="5px" mt="5px">
               {percentage}
             </Typography>
-            <Typography ml="5px" color={colors.greenAccent[500]}>
+            <Typography variant="h4" ml="5px">
               {subText}g
             </Typography>
           </Box>
