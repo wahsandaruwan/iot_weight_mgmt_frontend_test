@@ -425,7 +425,7 @@ const DeviceStat = () => {
           </Box>
         </Box>
         <Box height="50vh" width="100%" pb="20px" mt="30px">
-          <Typography variant="h3">Daily Stat</Typography>
+          <Typography variant="h3">Daily Statistics</Typography>
           <LineChart data={chart} />
         </Box>
       </Box>
