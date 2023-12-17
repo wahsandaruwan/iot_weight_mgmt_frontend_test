@@ -1,15 +1,15 @@
-import { ResponsiveLine } from '@nivo/line'
-import { useTheme } from '@mui/material'
-import { tokens } from '../../theme'
-import { lineChartDataDevice } from '../../data/chartData'
+import { ResponsiveLine } from "@nivo/line";
+import { useTheme } from "@mui/material";
+import { tokens } from "../../theme";
+import { lineChartDataDevice } from "../../data/chartData";
 
 const LineChart = ({
   isCustomLineColors = false,
   isDashboard = false,
   data = lineChartDataDevice,
 }) => {
-  const theme = useTheme()
-  const colors = tokens(theme.palette.mode)
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   return (
     <ResponsiveLine
@@ -47,14 +47,13 @@ const LineChart = ({
           },
         },
       }}
-      colors={isDashboard ? { datum: 'color' } : { scheme: 'nivo' }}
+      colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-      xScale={{ type: 'point' }}
-      xFormat=" >-"
+      xScale={{ type: "point" }}
       yScale={{
-        type: 'linear',
-        min: 'auto',
-        max: 'auto',
+        type: "linear",
+        min: "auto",
+        max: "auto",
         stacked: true,
         reverse: false,
       }}
@@ -65,22 +64,22 @@ const LineChart = ({
         tickSize: 3,
         tickPadding: 4,
         tickRotation: 40,
-        legend: 'Time',
+        legend: "Time",
         legendOffset: 40,
-        legendPosition: 'middle',
+        legendPosition: "middle",
       }}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'count',
+        legend: "Total Weight",
         legendOffset: -40,
-        legendPosition: 'middle',
+        legendPosition: "middle",
       }}
       pointSize={10}
-      pointColor={{ theme: 'background' }}
+      pointColor={{ theme: "background" }}
       pointBorderWidth={2}
-      pointBorderColor={{ from: 'serieColor' }}
+      pointBorderColor={{ from: "serieColor" }}
       pointLabelYOffset={-12}
       areaOpacity={0.15}
       useMesh={true}
@@ -114,7 +113,7 @@ const LineChart = ({
       //   ]
       // }
     />
-  )
-}
+  );
+};
 
-export default LineChart
+export default LineChart;

@@ -79,7 +79,7 @@ const DeviceStat = () => {
 
     const fetchChartData = {
       method: "GET",
-      url: `http://137.184.13.207:3300/api/device/all/${id}`,
+      url: `http://137.184.13.207:3300/api/device/all/${id}?period=daily`,
       headers: {
         "content-type": "application/json",
         token: `Bearer ${accessToken}`,
@@ -175,8 +175,6 @@ const DeviceStat = () => {
     lastUpdate: device.dateUpdated,
     assignedItem: "01",
   };
-
-  console.log(device);
 
   return (
     <Box m="0 32px">
