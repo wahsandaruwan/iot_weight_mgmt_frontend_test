@@ -37,6 +37,7 @@ const DeviceStat = () => {
   const [device, setDevice] = useState([]);
   const [asignedItem, setAsignedItem] = useState([]);
   const [chartData, setChartData] = useState([]);
+  const [period, setPeriod] = useState("daily");
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -54,6 +55,9 @@ const DeviceStat = () => {
     };
     axios(fetchDevice)
       .then((response) => {
+        if (response.data.weighingDeviceData.length <= 0) {
+          return;
+        }
         setDevice(response.data.weighingDeviceData[0]);
       })
       .catch((error) => {
@@ -79,7 +83,7 @@ const DeviceStat = () => {
 
     const fetchChartData = {
       method: "GET",
-      url: `http://137.184.13.207:3300/api/device/all/${id}?period=daily`,
+      url: `http://137.184.13.207:3300/api/device/all/${id}?period=${period}`,
       headers: {
         "content-type": "application/json",
         token: `Bearer ${accessToken}`,
@@ -88,10 +92,13 @@ const DeviceStat = () => {
     };
     axios(fetchChartData)
       .then((response) => {
+        if (response.data.weighingDeviceData.length <= 0) {
+          return;
+        }
         const data = response.data.weighingDeviceData[0].deviceData?.map(
           (entry) => ({
-            x: entry.timeCreated,
-            y: parseFloat(entry.totalWeight),
+            x: entry.timeCreated + " " + entry.dateCreated,
+            y: parseFloat(entry.itemCount),
           })
         );
 
@@ -107,7 +114,7 @@ const DeviceStat = () => {
 
     const intervalId = setInterval(fetchData, 3600000);
     return () => clearInterval(intervalId);
-  }, [id, accessToken]);
+  }, [id, accessToken, period]);
 
   const chart = [
     {
@@ -272,7 +279,7 @@ const DeviceStat = () => {
                   label="Device ID"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.deviceId || ""}
+                  value={asignedItem._id || ""}
                   name="deviceId"
                   disabled={true}
                   error={!!touched.deviceId && !!errors.deviceId}
@@ -286,7 +293,7 @@ const DeviceStat = () => {
                   label="Date Created"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.dateCreated || ""}
+                  value={asignedItem.dateCreated || ""}
                   name="dateCreated"
                   disabled={true}
                   error={!!touched.dateCreated && !!errors.dateCreated}
@@ -384,48 +391,79 @@ const DeviceStat = () => {
         mt="50px"
         p="15px 20px"
       >
-        <Box width="100%" display="flex" height="100%" gap="10px">
-          <Box
-            display="flex"
-            padding="10px"
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-            gap="10px"
-            backgroundColor={"#dad3d3"}
-          >
-            <Typography variant="h4">Items</Typography>
-            {device.deviceData ? (
-              <ProgressCircle
-                progress={device.deviceData?.itemCount / 100}
-                icon="count"
-                subText={parseInt(device.deviceData?.totalWeight)}
-              />
-            ) : null}
+        {chartData.length > 0 ? (
+          <Box>
+            <Box width="100%" display="flex" height="100%" gap="10px">
+              <Box
+                display="flex"
+                padding="10px"
+                alignItems="center"
+                justifyContent="center"
+                flexDirection="column"
+                gap="10px"
+                backgroundColor={"#dad3d3"}
+              >
+                <Typography variant="h4">Items</Typography>
+                {device.deviceData ? (
+                  <ProgressCircle
+                    progress={device.deviceData?.itemCount / 100}
+                    icon="count"
+                    subText={parseInt(device.deviceData?.totalWeight)}
+                  />
+                ) : null}
+              </Box>
+              <Box
+                display="flex"
+                padding="10px"
+                alignItems="center"
+                justifyContent="center"
+                flexDirection="column"
+                gap="10px"
+                backgroundColor={"#dad3d3"}
+              >
+                <Typography variant="h4">Battery</Typography>
+                {device.deviceData ? (
+                  <ProgressCircle
+                    progress={device.deviceData?.batteryPercentage / 100}
+                    icon="battery"
+                    subText={device.deviceData?.batteryVoltage}
+                  />
+                ) : null}
+              </Box>
+            </Box>
+
+            <Box height="50vh" width="100%" pb="20px" mt="30px">
+              <TextField
+                fullWidth
+                select
+                variant="filled"
+                type="text"
+                label="Filter"
+                // onBlur={handleBlur}
+                onChange={(e) => {
+                  setPeriod(e.target.value);
+                }}
+                // value={values.filter || ""}
+                name="filter"
+                // error={!!touched.filter && !!errors.filter}
+                // helperText={touched.filter && errors.filter}
+              >
+                <MenuItem value="daily">Daily</MenuItem>
+                <MenuItem value="weekly">Weekly</MenuItem>
+                <MenuItem value="monthly">Monthly</MenuItem>
+              </TextField>
+              <Box mb="30px"></Box>
+              <Typography variant="h3" sx={{ textTransform: "capitalize" }}>
+                {period} Statistics
+              </Typography>
+              {chartData.length > 0 ? <LineChart data={chart} /> : null}
+            </Box>
           </Box>
-          <Box
-            display="flex"
-            padding="10px"
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-            gap="10px"
-            backgroundColor={"#dad3d3"}
-          >
-            <Typography variant="h4">Battery</Typography>
-            {device.deviceData ? (
-              <ProgressCircle
-                progress={device.deviceData?.batteryPercentage / 100}
-                icon="battery"
-                subText={device.deviceData?.batteryVoltage}
-              />
-            ) : null}
-          </Box>
-        </Box>
-        <Box height="50vh" width="100%" pb="20px" mt="30px">
-          <Typography variant="h3">Daily Statistics</Typography>
-          <LineChart data={chart} />
-        </Box>
+        ) : (
+          <Typography variant="h6" sx={{ textTransform: "capitalize" }}>
+            No Data Available!
+          </Typography>
+        )}
       </Box>
     </Box>
   );

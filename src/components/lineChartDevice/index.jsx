@@ -48,7 +48,7 @@ const LineChart = ({
         },
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }}
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+      margin={{ top: 50, right: 110, bottom: 150, left: 60 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
@@ -72,7 +72,7 @@ const LineChart = ({
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Total Weight",
+        legend: "Item Count",
         legendOffset: -40,
         legendPosition: "middle",
       }}
